@@ -205,8 +205,8 @@ def add():
 """
 
 
-movies = [m for m in engine.execute("SELECT * FROM Movie")]
-print movies
+
+
 
 
 
@@ -221,11 +221,41 @@ def show_all():
 @app.route('/movie_info')
 def show_movie_page():
 
+  movies = [m for m in engine.execute("SELECT * FROM Movie")]
+  print movies
+  return render_template("movie_page.html", movies = movies)#movies = Movie.query.all())#, movies = Movie.query.all() )
+
+@app.route('/movie_data')
+def show_movie():
+
+  print("HELELELELELELLEEOOOO")
+  movies = [m for m in engine.execute("SELECT * FROM Movie")]
+  
+
+
+
+
   return render_template("movie_page.html", movies = movies)#movies = Movie.query.all())#, movies = Movie.query.all() )
 
 
-def show_movie_page():
-  return render_template("movie_page.html", movies = movies)#movies = Movie.query.all())#, movies = Movie.query.all() )
+
+userReviews = [u for u in engine.excute("SELECT * FROM Usercritic_rates")] 
+print userReviews
+
+@app.route('usercitic', methods=['POST'])
+def parse_request():
+  name = request.form.get('name')
+  return render_template("usercritic_review.html")
+
+
+
+  #movie = request.form.get['movie_name']
+  #print movie
+
+
+
+
+  #return render_template("movie_page.html", movies = movies)#movies = Movie.query.all())#, movies = Movie.query.all() )
 
 
 
