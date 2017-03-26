@@ -1,0 +1,36 @@
+<html>
+
+
+
+<body>
+  <h1>Show me mula</h1>
+
+
+
+   <table>
+            <thead>
+               <tr>
+                  <th>Name</th>
+                  <th>Genre</th>
+               </tr>
+            </thead>
+            
+            <tbody>
+               <!-- loop thru each movie row & pick specific attributes -->
+               {% for movie in movies %}
+                  <tr>
+                     <td>{{ movie.name }}</td>
+                     <td>{{ movie.genre }}</td>
+ 
+                  </tr>
+               {% endfor %}
+            </tbody>
+   </table>
+   <button type="button"><a href="/usercritic">submit</a></button>
+
+
+
+</body>
+
+
+</html>
