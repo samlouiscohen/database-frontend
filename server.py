@@ -165,7 +165,6 @@ def index():
   # render_template looks in the templates/ folder for files.
   # for example, the below file reads template/index.html
   #
-  
   return render_template("index.html", **context)
   #return render_template("home.html", **context)
 
@@ -177,12 +176,7 @@ def index():
 # Notice that the function name is another() rather than index()
 # The functions for each app.route need to have different names
 #
-# @app.route('/another')
-# def another():
-#   return render_template("another.html")
-@app.route('/usercritic')
-def another():
-  return render_template("usercritic.html")
+
 
 
 # Example of adding new data to the database
@@ -218,44 +212,81 @@ def show_all():
 
   return render_template("show_all.html", movies = movies)#movies = Movie.query.all())#, movies = Movie.query.all() )
 
-@app.route('/movie_info')
-def show_movie_page():
-
-  movies = [m for m in engine.execute("SELECT * FROM Movie")]
-  print movies
-  return render_template("movie_page.html", movies = movies)#movies = Movie.query.all())#, movies = Movie.query.all() )
 
 @app.route('/movie_data')
 def show_movie():
-
-  print("HELELELELELELLEEOOOO")
   movies = [m for m in engine.execute("SELECT * FROM Movie")]
-  
 
-
-
-
+  # movies = [m for m in engine.execute("SELECT * FROM Movie")]
   return render_template("movie_page.html", movies = movies)#movies = Movie.query.all())#, movies = Movie.query.all() )
 
 
+@app.route('/movie_data_specific', methods = ["POST"])
+def show_movie_specific():
+  print "in show"
+  movieID = int(request.form['movie_id'])
+  print movieID
+  movie = [m for m in engine.execute("SELECT * FROM Movie M WHERE M.movie_id = %d" % (movieID))]
+  movies = [m for m in engine.execute("SELECT * FROM Movie")]
 
-userReviews = [u for u in engine.excute("SELECT * FROM Usercritic_rates")] 
-print userReviews
 
-@app.route('usercitic', methods=['POST'])
+  actors = [a for a in engine.execute("SELECT * FROM Contributor C\
+   WHERE C.contributor_id IN \
+   (SELECT C.contributor_id FROM Contributor C, Acts A, Movie M\
+    WHERE WHERE M.movie_id = A.movie_id AND A.contributor_id = C.contributor_id)")]
+  
+  producers = [p for p in engine.execute("SELECT * FROM Contributor C\
+   WHERE C.contributor_id IN \
+   (SELECT C.contributor_id FROM Contributor C, Produces P, Movie M\
+    WHERE WHERE M.movie_id = P.movie_id AND P.contributor_id = C.contributor_id)")]
+
+  return render_template("movie_page_specific.html", movies = movies, specificMovie= movie, movieActors = actors, movieProducers = producers)#movies = Movie.query.all())#, movies = Movie.query.all() )
+
+
+
+@app.route('/usercritic')#, methods=['POST'])
 def parse_request():
-  name = request.form.get('name')
-  return render_template("usercritic_review.html")
+
+  movies = [m for m in engine.execute("SELECT * FROM Movie")]
+
+  userReviews = [u for u in engine.execute("SELECT * FROM Usercritic U, Reviews R, Movie M WHERE U.username = R.username AND R.movie_id = M.movie_id ORDER BY R.rating DESC")] 
+  
+  #name = request.form.get('name')
+  return render_template("usercritic.html", userReviews = userReviews, movies = movies)
+
+
+@app.route('/submit_review', methods = ["POST"])
+def push_to_database():
+
+  #print "HELELELELELELELELLELELELELELELELELELELLE"
+  movies = [m for m in engine.execute("SELECT * FROM Movie")]
+
+  username = "'" + request.form['username_value'] + "'"
+  age =  int(request.form['age'])
+  gender = "'" + request.form['gender'] + "'"
+
+  #May have to change movie to movie_id because movie names are not unique
+  movieID = int(request.form['movie_id_to_review'])
+  review = int(request.form['user_review'])
+
+  print username, " ", movieID, " ",review
+
+
+  if username not in [un for un in engine.execute("SELECT username FROM Usercritic U")]:
+    print "Adding a new user"
+    engine.execute("INSERT INTO Usercritic Values(%s, %s, %d)" % (username, gender, age))
+
+  engine.execute("INSERT INTO Reviews Values(%d, %d, %s)" % (movieID, review, username))
+
+  #engine.execute("INSERT INTO Reviews Values(movieID, review, name)")
+  #engine.execute(reviews.insert(), movie_id = movieID, rating=review, username = name)
+
+  userReviews = [u for u in engine.execute("SELECT * FROM Usercritic U, Reviews R, Movie M WHERE U.username = R.username AND R.movie_id = M.movie_id ORDER BY R.rating DESC")] 
+  return render_template("usercritic.html", userReviews = userReviews, movies = movies)
 
 
 
-  #movie = request.form.get['movie_name']
-  #print movie
 
-
-
-
-  #return render_template("movie_page.html", movies = movies)#movies = Movie.query.all())#, movies = Movie.query.all() )
 
 
 

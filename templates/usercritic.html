@@ -1,6 +1,6 @@
 <html>
   <style>
-    body{ 
+    body{
       font-size: 15pt;
       font-family: arial;
     }
@@ -8,20 +8,125 @@
 
 
 <body>
-  <h1>Some famous Computer Scientists</h1>
-  <div>{{data}}</div>
+<!--   <h1>User Critic Reviews</h1>
+  <div>{{userReviews}}</div>
 
   <div>
-    {% for n in data %}
+    {% for n in userReviews %}
     <div>{{n}}</div>
     {% endfor %}
-  </div>
+  </div> -->
 
-<p><a href="another">Go to the other page</a></p>
 
-<form method="POST" action="/add">
-<p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
-</form>
+
+<div align="center">
+  <h3>Past pre-professional critcs say: <h3>
+</div>
+<div align="center">
+   <table>
+            <thead>
+               <tr>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Gender</th>
+                  <th>Movie Name</th>
+                  <th>Rating</th>
+               </tr>
+            </thead>
+            
+            <tbody>
+               <!-- loop thru each movie row & pick specific attributes -->
+              {% for review in userReviews %}
+
+                     <td>{{ review.username }}</td>
+                     <td>{{ review.age }}</td>
+                     <td>{{ review.gender }}</td>
+                     <td>{{ review.name }}</td>
+                     <td>{{ review.rating }}</td>
+ 
+                  </tr>
+              {% endfor %}
+            </tbody>
+   </table>
+</div>
+
+
+
+<div align="center">
+  <h3>Have your voice heard! Review a movie!<h3>
+</div>
+
+<!--Selecting a movie to review and sending user data -->
+  <form action="/submit_review" method = "POST">
+    <div align="center">
+
+      <!-- <label for="name">Name</label> -->
+      Username: <input type="text" name="username_value" placeholder = "Enter a username"> 
+      <br>
+        
+
+      Gender: <select name="gender">
+        <option value = "male">male</option>
+        <option value = "female">female</option>
+        <option value = "other">other</option>
+      </select> 
+      <br>
+
+
+        Age: <select name="age">
+          {% for x in range(0, 100) %}
+            <option value = {{x|string}}>{{x|string}}</option>
+          {% endfor %}
+
+        </select>
+        <br>
+      
+
+
+      Movie: <select name="movie_id_to_review">
+
+        {% for movie in movies %}
+        <option value = {{movie.movie_id|string}}>{{movie.name|string}}</option><!-- , id: {{movie.movie_id|string}}</option> -->
+          <!-- <option value = {{movie.name|string}}>{{movie.name|string}} {{movie.movie_id|string}}</option> -->
+            {% endfor %}
+
+      </select>
+      <br>
+
+
+      Rating: <select name="user_review">
+        <option value = "1">1</option>
+        <option value = "2">2</option>
+        <option value = "3">3</option>
+        <option value = "4">4</option>
+        <option value = "5">5</option>
+      </select>
+      <br>
+
+         <button type="submit">Enter!</button>
+    </div>
+  </form>
+
+
+
+<button type="submit">Enter!</button>
+
+
+
+
+
+
+<!-- <p><a href="another">Go to the other page</a></p>
+ -->
+
+
+
+
+
+<!-- <form method="POST" action="/add">
+
+<p>New user review: <input type="text" name="name"> <input type="submit" value="Add"></p>
+</form> -->
 
 </body>
 

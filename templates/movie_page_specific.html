@@ -6,7 +6,7 @@
   <h1>Show me mula</h1>
 
 
-   <form action="/movie_data_specific" method = "POST"> <!-- {{ url_for('show_movie') }}"> -->
+   <form action="/movie_data_specific" method = "POST"> 
       <div align="center">
          
          <select name="movie_id">
@@ -36,7 +36,7 @@
             
             <tbody>
                <!-- loop thru each movie row & pick specific attributes -->
-               {% for movie in movies %}
+               {% for movie in specificMovie %}
 
                   <tr>
                      <td>{{ movie.name }}</td>
@@ -55,13 +55,54 @@
 
 
 
+
+
+
+
+<h2>Actors</h2>
+
+<table>
+	<!-- Thread groups table header content together -->
+	<thread>
+		<tr>
+        	<th>Name</th>
+        	<th>Number of movies</th>
+         	<th>Year</th>
+        	<th>Revenue(million $)    </th>
+        	<th>Runtime(minutes)</th>
+        	<th>Rotten tomatoes score</th>
+        </tr>
+	</thread>
+
+	<tbody>
+		{% for c in contributorList %}
+
+	        <tr>
+	        <td>{{ c.name }}</td>
+	        <td>{{ c.number_movies }}</td>
+	        <td>{{ c.gender }}</td>
+	        <td>{{ c.birth_year }}</td>
+	        </tr>
+	    {% endfor %}
+	</tbody>
+</table>
+
+
+
+
+
+
+
+
 </body>
 
 
 
 
 
+
 </html>
+
 
 
 
