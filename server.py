@@ -233,12 +233,12 @@ def show_movie_specific():
   actors = [a for a in engine.execute("SELECT * FROM Contributor C\
    WHERE C.contributor_id IN \
    (SELECT C.contributor_id FROM Contributor C, Acts A, Movie M\
-    WHERE WHERE M.movie_id = A.movie_id AND A.contributor_id = C.contributor_id)")]
+    WHERE M.movie_id = %d AND M.movie_id = A.movie_id AND A.contributor_id = C.contributor_id)" % (movieID))]
   
   producers = [p for p in engine.execute("SELECT * FROM Contributor C\
    WHERE C.contributor_id IN \
    (SELECT C.contributor_id FROM Contributor C, Produces P, Movie M\
-    WHERE WHERE M.movie_id = P.movie_id AND P.contributor_id = C.contributor_id)")]
+    WHERE M.movie_id = %d AND M.movie_id = P.movie_id AND P.contributor_id = C.contributor_id)" % (movieID))]
 
   return render_template("movie_page_specific.html", movies = movies, specificMovie= movie, movieActors = actors, movieProducers = producers)#movies = Movie.query.all())#, movies = Movie.query.all() )
 
