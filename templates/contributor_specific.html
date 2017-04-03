@@ -1,0 +1,130 @@
+
+<html>
+
+
+<body>
+  <h1>Show me mula</h1>
+
+
+   <form action="/contributor_data_specific" method = "POST">
+      <div align="center">
+
+         <select name="contributor_id">
+
+            {% for contributor in contributors %}
+               <option value = {{contributor.contributor_id|string}}>{{contributor.name|string}}</option>
+            {% endfor %}
+
+         </select>
+         <button type="submit">Enter!</button>
+      </div>
+   </form>
+
+<h2> Contributor </h2>
+   <table>
+            <thead>
+               <tr>
+                 <th>Name</th>
+                 <th>Number of Movies</th>
+                 <th>Gender</th>
+                 <th>Birth Year</th>
+               </tr>
+            </thead>
+
+            <tbody>
+               <!-- loop thru each movie row & pick specific attributes -->
+               {% for contributor in specificContributor %}
+
+                  <tr>
+                    <td>{{ contributor.name }}</td>
+                    <td>{{ contributor.number_movies }}</td>
+                    <td>{{ contributor.gender }}</td>
+                    <td>{{ contributor.birth_year }}</td>
+                  </tr>
+               {% endfor %}
+            </tbody>
+   </table>
+
+
+
+
+
+
+
+
+<h2>Movies Acted In:</h2>
+
+<table>
+	<!-- Thread groups table header content together -->
+	<thread>
+		<tr>
+      <th>Name</th>
+      <th>Genre</th>
+      <th>Year</th>
+      <th>Revenue(million $)    </th>
+      <th>Runtime(minutes)</th>
+      <th>Rotten tomatoes score</th>
+        </tr>
+	</thread>
+
+	<tbody>
+		{% for a in actor_movie %}
+
+	        <tr>
+            <td>{{ movie.name }}</td>
+            <td>{{ movie.genre }}</td>
+            <td>{{ movie.year }}</td>
+            <td>{{ movie.revenue }}</td>
+            <td>{{ movie.runtime }}</td>
+            <td>{{ movie.rotten_tomatoes_score }}</td>
+	        </tr>
+	    {% endfor %}
+	</tbody>
+</table>
+
+
+<h2>Movies Produced:</h2>
+
+<table>
+	<!-- Thread groups table header content together -->
+	<thread>
+		<tr>
+      <th>Name</th>
+      <th>Genre</th>
+      <th>Year</th>
+      <th>Revenue(million $)    </th>
+      <th>Runtime(minutes)</th>
+      <th>Rotten tomatoes score</th>
+        </tr>
+	</thread>
+
+	<tbody>
+		{% for p in producer_movie %}
+
+	        <tr>
+            <td>{{ movie.name }}</td>
+            <td>{{ movie.genre }}</td>
+            <td>{{ movie.year }}</td>
+            <td>{{ movie.revenue }}</td>
+            <td>{{ movie.runtime }}</td>
+            <td>{{ movie.rotten_tomatoes_score }}</td>
+	        </tr>
+	    {% endfor %}
+	</tbody>
+</table>
+
+
+
+
+
+
+
+
+</body>
+
+
+
+
+
+
+</html>
