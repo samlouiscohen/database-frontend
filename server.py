@@ -229,6 +229,38 @@ def show_movie_specific():
   movie = [m for m in engine.execute("SELECT * FROM Movie M WHERE M.movie_id = %d" % (movieID))]
   movies = [m for m in engine.execute("SELECT * FROM Movie")]
 
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+#contributor shit
+
+@app.route('/contributor_data')
+def show_contributor():
+  contributors = [c for c in engine.execute("SELECT * FROM Contributors")]
+
+  return render_template("contributor.html", contributors = contributors)
+
+
+@app.route('/contributor_data_specific', methods = ["POST"])
+def show_contributor_specific():
+  print "in show"
+  contributorID = int(request.form['contributor_id'])
+
+  contributor = [c for c in engine.execute("SELECT * FROM Contributor C WHERE C.contributor_id = %d" % (contributorID))]
+  contributors = [c for c in engine.execute("SELECT * FROM Contributor")]
+
+
+  actor_movie = [a for a in engine.execute("SELECT * FROM Movie M\
+   WHERE M.movie_id IN \
+   (SELECT M.movie_id FROM Contributor C, Acts A, Movie M\
+    WHERE C.contributor_id = A.contributor_id = %d AND M.movie_id = A.movie_id AND A.contributor_id = %d)" % (contributorID))]
+
+  producer_movie = [p for p in engine.execute("SELECT * FROM Movie M\
+   WHERE M.movie_id IN \
+   (SELECT M.movie_id FROM Contributor C, Produces P, Movie M\
+    WHERE C.contributor_id = P.contributor_id = %d AND M.movie_id = P.movie_id AND P.contributor_id = %d)" % (contributorID))]
+
+  return render_template("contributor_data_specific.html", contributors = contributors, specificContributor= contributor, actor_movie = actor_movie, producer_movie = producer_movie)
+
+#--------------------------------------------
 
   actors = [a for a in engine.execute("SELECT * FROM Contributor C\
    WHERE C.contributor_id IN \
