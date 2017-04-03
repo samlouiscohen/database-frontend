@@ -113,9 +113,53 @@
 </table>
 
 
+<h2>Studio</h2>
 
+<table>
+  <!-- Thread groups table header content together -->
+  <thread>
+    <tr>
+          <th>Name</th>
+          <th>Number of movies</th>
+          <th>Founding Year</th>
+        </tr>
+  </thread>
 
+  <tbody>
+    {% for s in studios %}
 
+          <tr>
+          <td>{{ s.name }}</td>
+          <td>{{ s.number_movies }}</td>
+          <td>{{ s.founding_year }}</td>
+          </tr>
+      {% endfor %}
+  </tbody>
+</table>
+
+<h2>Awards</h2>
+
+<table>
+  <!-- Thread groups table header content together -->
+  <thread>
+    <tr>
+          <th>Category</th>
+          <th>Type</th>
+          <th>Year</th>
+        </tr>
+  </thread>
+
+  <tbody>
+    {% for a in awards %}
+
+          <tr>
+          <td>{{ a.category }}</td>
+          <td>{{ a.type }}</td>
+          <td>{{ a.year }}</td>
+          </tr>
+      {% endfor %}
+  </tbody>
+</table>
 
 
 

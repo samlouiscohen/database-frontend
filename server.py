@@ -240,8 +240,17 @@ def show_movie_specific():
    (SELECT C.contributor_id FROM Contributor C, Produces P, Movie M\
     WHERE M.movie_id = %d AND M.movie_id = P.movie_id AND P.contributor_id = C.contributor_id)" % (movieID))]
 
-  return render_template("movie_page_specific.html", movies = movies, specificMovie= movie, movieActors = actors, movieProducers = producers)#movies = Movie.query.all())#, movies = Movie.query.all() )
+  studios = [s for s in engine.execute("SELECT * FROM Studio S\
+    WHERE S.studio_id IN\
+    (SELECT D.studio_id FROM Studio S, Develops D WHERE S.studio_id = D.studio_id AND D.movie_id = %d)" %(movieID))]
 
+  awards = [a for a in engine.execute("SELECT * FROM Award A\
+    WHERE A.movie_id = %d" % (movieID))]
+
+  print("WE'RE IN")
+
+
+  return render_template("movie_page_specific.html", movies = movies, specificMovie= movie, movieActors = actors, movieProducers = producers, studios = studios, awards = awards)#movies = Movie.query.all())#, movies = Movie.query.all() )
 
 
 @app.route('/usercritic')#, methods=['POST'])
