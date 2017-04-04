@@ -135,6 +135,7 @@
           </tr>
       {% endfor %}
   </tbody>
+
 </table>
 
 <h2>Awards</h2>
@@ -160,6 +161,56 @@
       {% endfor %}
   </tbody>
 </table>
+
+
+
+<h2>Distributors</h2>
+
+<table>
+  <!-- Thread groups table header content together -->
+  <thread>
+    <tr>
+          <th>Name</th>
+          <th>Medium</th>
+        </tr>
+  </thread>
+
+  <tbody>
+    {% for d in distributors %}
+
+          <tr>
+          <td>{{ d.name }}</td>
+          <td>{{ d.medium }}</td>
+          </tr>
+      {% endfor %}
+  </tbody>
+</table>
+
+
+
+
+<h2>Movie Critic Ratings</h2>
+
+<table>
+  <!-- Thread groups table header content together -->
+  <thread>
+    <tr>
+          <th>Name</th>
+          <th>IsFresh</th>
+        </tr>
+  </thread>
+
+  <tbody>
+    {% for mr in MovieCriticsRates %}
+          <tr>
+          <td>{{ mr.name }}</td>
+          <td>{{ mr.isfresh }}</td>
+          </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
 
 
 
