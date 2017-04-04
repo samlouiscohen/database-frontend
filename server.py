@@ -294,7 +294,27 @@ def show_contributor_specific():
   return render_template("contributor_data_specific.html", contributors = contributors, specificContributor= contributor, actor_movie = actor_movie, producer_movie = producer_movie)
 
 #--------------------------------------------
+@app.route('/quick_distributor')
+def show_distributor():
+  d_attributes = [dist_id, name, medium]
+  return render_template("contributor.html", contributors = contributors)
 
+@app.route('/quick_studio')
+def show_studio():
+    s_attributes = [studio_id, founding_year, number_movies, name]
+    return render_template("contributor.html", contributors = contributors)
+
+@app.route('/quick_award')
+def show_award():
+    a_attributes = [award_id, movie_id, "type", category, year]
+    return render_template("contributor.html", contributors = contributors)
+
+@app.route('/quick_contributor')
+def show_contributors():
+    c_attributes = [contributor_id, name, number_movies, gender, birth_year]
+    return render_template("contributor.html", contributors = contributors)
+
+--------------------------------------------
 @app.route('/usercritic')#, methods=['POST'])
 def parse_request():
 
