@@ -1,0 +1,164 @@
+<html>
+
+
+<body>
+
+
+<h3>Order your search results by one of the below attributes!</h3>
+
+{% if type == "distributor" %}
+	<form action="/quick_qs_order" method = "POST">
+	   <div align="center">
+
+	      <select name="orderby_attribute">
+
+	         {% for item in attributes %}
+	            <option value = {{item|string}},distributor >{{item|string}}</option>
+	         {% endfor %}
+
+	      </select>
+	      <button type="submit">Enter!</button>
+	   </div>
+	</form>
+
+	<h2> Distributors </h2>
+   <table>
+        <thead>
+           <tr>
+              <th>Name</th>
+              <th>Medium</th>
+           </tr>
+        </thead>
+     
+        <tbody>
+           <!-- loop thru each movie row & pick specific attributes -->
+           {% for distributor in entityTable %}
+              <tr>
+                 <td>{{ distributor.name }}</td>
+                 <td>{{ distributor.medium }}</td> 
+              </tr>
+           {% endfor %}
+        </tbody>
+   </table>
+
+{% elif type == "studio" %}
+	<form action="/quick_qs_order" method = "POST">
+	   <div align="center">
+
+	      <select name="orderby_attribute">
+
+	         {% for item in attributes %}
+	            <option value = {{item|string}},studio >{{item|string}}</option>
+	         {% endfor %}
+
+	      </select>
+	      <button type="submit">Enter!</button>
+	   </div>
+	</form>
+
+	<h2> Studio </h2>
+   <table>
+        <thead>
+           <tr>
+              <th>Name</th>
+              <th>NumberMovies</th>
+              <th>FoundingYear</th>
+           </tr>
+        </thead>
+     
+        <tbody>
+           <!-- loop thru each movie row & pick specific attributes -->
+           {% for studio in entityTable %}
+              <tr>
+                 <td>{{ studio.name }}</td>
+                 <td>{{ studio.number_movies}}</td> 
+                 <td>{{ studio.founding_year}}</td> 
+              </tr>
+           {% endfor %}
+        </tbody>
+   </table>
+
+
+{% elif type == "award" %}
+	<form action="/quick_qs_order" method = "POST">
+	   <div align="center">
+
+	      <select name="orderby_attribute">
+
+	         {% for item in attributes %}
+	            <option value = {{item|string}},award >{{item|string}}</option>
+	         {% endfor %}
+
+	      </select>
+	      <button type="submit">Enter!</button>
+	   </div>
+	</form>
+
+	<h2> Award </h2>
+   <table>
+        <thead>
+           <tr>
+              <th>Category</th>
+              <th>Type</th>
+              <th>Year</th>
+           </tr>
+        </thead>
+     
+        <tbody>
+           <!-- loop thru each movie row & pick specific attributes -->
+           {% for award in entityTable %}
+              <tr>
+                 <td>{{ award.category }}</td>
+                 <td>{{ award.type}}</td> 
+                 <td>{{ award.year}}</td> 
+              </tr>
+           {% endfor %}
+        </tbody>
+   </table>
+
+{% elif type == "contributor" %}
+	<form action="/quick_qs_order" method = "POST">
+	   <div align="center">
+
+	      <select name="orderby_attribute">
+
+	         {% for item in attributes %}
+	            <option value = {{item|string}},contributor >{{item|string}}</option>
+	         {% endfor %}
+
+	      </select>
+	      <button type="submit">Enter!</button>
+	   </div>
+	</form>
+
+	<h2> Contributor </h2>
+   <table>
+        <thead>
+           <tr>
+              <th>Name</th>
+              <th>NumberOfMovies</th>
+              <th>Gender</th>
+              <th>BirthYear</th>
+
+           </tr>
+        </thead>
+     
+        <tbody>
+           <!-- loop thru each movie row & pick specific attributes -->
+           {% for contributor in entityTable %}
+              <tr>
+                 <td>{{contributor.name}}</td>
+                 <td>{{contributor.number_movies}}</td> 
+                 <td>{{contributor.gender}}</td> 
+                 <td>{{contributor.birth_year}}</td> 
+              </tr>
+           {% endfor %}
+        </tbody>
+   </table>
+{% endif %}
+
+
+
+
+
+</body>

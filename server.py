@@ -294,10 +294,106 @@ def show_contributor_specific():
   return render_template("contributor_data_specific.html", contributors = contributors, specificContributor= contributor, actor_movie = actor_movie, producer_movie = producer_movie)
 
 #--------------------------------------------
-@app.route('/quick_distributor')
-def show_distributor():
-  d_attributes = [dist_id, name, medium]
-  return render_template("contributor.html", contributors = contributors)
+@app.route('/quick_qs')
+def quick_qs():
+  
+  entities = ["distributor", "studio", "award", "contributor"]
+
+  return render_template("quick_qs.html", entities = entities)
+
+
+@app.route('/quick_qs_details', methods = ["POST"])
+def show_quick_qs():
+
+  entityType = str(request.form['entity_type'])
+
+
+  if entityType == "distributor":
+    #query for data on each subexample
+    distributors = [d for d in engine.execute("SELECT * FROM Distributor")]
+    attributes = ["name", "medium"]
+    return render_template("display_quick_qs.html", entityTable = distributors, type = entityType, attributes = attributes)
+
+  elif entityType == "studio":
+    studios = [s for s in engine.execute("SELECT * FROM Studio")]
+    attributes = ["name", "number_movies","founding_year"]
+    return render_template("display_quick_qs.html", entityTable = studios, type = entityType, attributes = attributes)
+    
+  elif entityType == "award":
+    awards = [a for a in engine.execute("SELECT * FROM award")]
+    attributes = ["type", "category", "year"]
+    return render_template("display_quick_qs.html", entityTable = awards, type = entityType, attributes = attributes)
+    
+  elif entityType == "contributor":
+    contributors = [a for a in engine.execute("SELECT * FROM contributor")]
+    attributes = ["name", "number_movies", "gender", "birth_year"]
+    return render_template("display_quick_qs.html", entityTable = contributors, type = entityType, attributes = attributes)
+
+
+
+@app.route('/quick_qs_order', methods = ["POST"])
+def show_quick_qs_order():
+  """Note: The user has to use the 'back' button to change entity type
+  We don't handle that here."""
+
+
+  #entityType = str(request.form['entity_type'])
+
+  orderby_attribute = str(request.form['orderby_attribute'])
+  #print orderby_attribute 
+  #print "ORDERBy attribute!" + orderby_attribute
+
+  orderBy_vs_type = [y for y in (x.strip() for x in orderby_attribute.split(',')) if y]
+  orderBy = orderBy_vs_type[0]
+  entityType = orderBy_vs_type[1]
+
+  print orderBy_vs_type
+
+  if entityType == "distributor":
+    #query for data on each subexample
+    distributors = [d for d in engine.execute("SELECT * FROM Distributor ORDER BY %s" % (orderBy))]
+    print distributors
+    attributes = ["name", "medium"]
+    return render_template("display_quick_qs.html", entityTable = distributors , type = entityType, attributes = attributes)
+  
+  elif entityType == "studio":
+    studios = [s for s in engine.execute("SELECT * FROM Studio ORDER BY %s" % (orderBy))]
+    attributes = ["name", "number_movies","founding_year"]
+    return render_template("display_quick_qs.html", entityTable = studios, type = entityType, attributes = attributes)
+    
+  elif entityType == "award":
+    awards = [a for a in engine.execute("SELECT * FROM award ORDER BY %s" % (orderBy))]
+    attributes = ["type", "category", "year"]
+    return render_template("display_quick_qs.html", entityTable = awards, type = entityType, attributes = attributes)
+    
+  elif entityType == "contributor":
+    contributors = [a for a in engine.execute("SELECT * FROM contributor ORDER BY %s" % (orderBy))]
+    attributes = ["name", "number_movies", "gender", "birth_year"]
+    return render_template("display_quick_qs.html", entityTable = contributors, type = entityType, attributes = attributes)
+
+
+
+  #return render_template("display_quick_qs.html", entityTable = distributors, type = entityType, attributes = attributes)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route('/quick_studio')
 def show_studio():
@@ -314,14 +410,14 @@ def show_contributors():
     c_attributes = [contributor_id, name, number_movies, gender, birth_year]
     return render_template("contributor.html", contributors = contributors)
 
---------------------------------------------
+#--------------------------------------------
 @app.route('/usercritic')#, methods=['POST'])
 def parse_request():
 
   movies = [m for m in engine.execute("SELECT * FROM Movie")]
 
   userReviews = [u for u in engine.execute("SELECT * FROM Usercritic U, Reviews R, Movie M WHERE U.username = R.username AND R.movie_id = M.movie_id ORDER BY R.rating DESC")] 
-  
+  print userReviews
   #name = request.form.get('name')
   return render_template("usercritic.html", userReviews = userReviews, movies = movies)
 
@@ -332,7 +428,9 @@ def push_to_database():
   #print "HELELELELELELELELLELELELELELELELELELELLE"
   movies = [m for m in engine.execute("SELECT * FROM Movie")]
 
-  username = "'" + request.form['username_value'] + "'"
+  username = request.form['username_value']
+  username_formatted = "'"+request.form['username_value']+"'"
+
   age =  int(request.form['age'])
   gender = "'" + request.form['gender'] + "'"
 
@@ -343,14 +441,35 @@ def push_to_database():
   print username, " ", movieID, " ",review
 
 
-  if username not in [un for un in engine.execute("SELECT username FROM Usercritic U")]:
-    print "Adding a new user"
+  db_users = [un[0] for un in engine.execute("SELECT username FROM Usercritic U")]
+  print "-------------------------------------"
+  #print db_users
+
+
+  attemptUser = "(u"+username+",)"
+  print "attemptUssr: " + attemptUser
+
+  for a in db_users:
+    print str(a) == attemptUser
+    print a == attemptUser
+
+
+
+  if username not in db_users:
+    print "Adding a new user--------------------------------------------------"
     engine.execute("INSERT INTO Usercritic Values(%s, %s, %d)" % (username, gender, age))
 
-  engine.execute("INSERT INTO Reviews Values(%d, %d, %s)" % (movieID, review, username))
 
-  #engine.execute("INSERT INTO Reviews Values(movieID, review, name)")
-  #engine.execute(reviews.insert(), movie_id = movieID, rating=review, username = name)
+  print [mv[0] for mv in engine.execute("SELECT movie_id FROM Usercritic U, Reviews R WHERE U.username = R.username AND U.username = %s" % (username_formatted))]  
+  print "movie id: " + str(movieID)
+
+  if movieID in [mv[0] for mv in engine.execute("SELECT movie_id FROM Usercritic U, Reviews R WHERE U.username = R.username AND U.username = %s" % (username_formatted))]:
+    print "You cannot rate the same movie--------------------------------------------------."
+    userReviews = [u for u in engine.execute("SELECT * FROM Usercritic U, Reviews R, Movie M WHERE U.username = R.username AND R.movie_id = M.movie_id ORDER BY R.rating DESC")] 
+    return render_template("usercritic.html", userReviews = userReviews, movies = movies)
+
+
+  engine.execute("INSERT INTO Reviews Values(%d, %d, %s)" % (movieID, review, username))
 
   userReviews = [u for u in engine.execute("SELECT * FROM Usercritic U, Reviews R, Movie M WHERE U.username = R.username AND R.movie_id = M.movie_id ORDER BY R.rating DESC")] 
   return render_template("usercritic.html", userReviews = userReviews, movies = movies)

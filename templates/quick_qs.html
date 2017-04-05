@@ -12,14 +12,29 @@
 <center>
 
   <h1>WELCOME TO QUICK QS!!</h1>
-  <h2>Search more specifics!</h2>
+  <h2>Probe into the movies you LUV!</h2>
+  
+  <form action="/quick_qs_details" method = "POST"> 
+  <div align="center">     
+    <select name="entity_type">
+      {% for entity in entities %}
+        <option value = {{entity|string}}>{{entity|string}}</option>
+      {% endfor %}
 
-  <button type="button" style="width:100px; height:50px;"><a href="'/quick_distributor'">Distributors</a></button>
+    </select>
+    
+    <button type="submit">Enter!</button>
+  </div>
+  </form>
+
+
+
+<!--   <button type="button" style="width:100px; height:50px;"><a href="/quick_distributor">Distributors</a></button>
   <button type="button" style="width:100px; height:50px;"><a href="/quick_studio">Studios</a></button>
   <button type="button" style="width:100px; height:50px;"><a href="/quick_award">Awards</a></button>
   <button type="button" style="width:100px; height:50px;"><a href="/quick_contributor">Contributors</a></button>
   <button type="button" style="width:100px; height:50px;"><a href="/quick_movie_critics">Movie Critics</a></button>
-  <button type="button" style="width:100px; height:50px;"><a href="/quick_user_critics">User Critics</a></button>
+  <button type="button" style="width:100px; height:50px;"><a href="/quick_user_critics">User Critics</a></button> -->
 </center>
 
 </body>
