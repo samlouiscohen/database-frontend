@@ -336,12 +336,7 @@ def show_quick_qs_order():
   """Note: The user has to use the 'back' button to change entity type
   We don't handle that here."""
 
-
-  #entityType = str(request.form['entity_type'])
-
   orderby_attribute = str(request.form['orderby_attribute'])
-  #print orderby_attribute 
-  #print "ORDERBy attribute!" + orderby_attribute
 
   orderBy_vs_type = [y for y in (x.strip() for x in orderby_attribute.split(',')) if y]
   orderBy = orderBy_vs_type[0]
@@ -370,27 +365,6 @@ def show_quick_qs_order():
     contributors = [a for a in engine.execute("SELECT * FROM contributor ORDER BY %s" % (orderBy))]
     attributes = ["name", "number_movies", "gender", "birth_year"]
     return render_template("display_quick_qs.html", entityTable = contributors, type = entityType, attributes = attributes)
-
-
-
-  #return render_template("display_quick_qs.html", entityTable = distributors, type = entityType, attributes = attributes)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -457,7 +431,7 @@ def push_to_database():
 
   if username not in db_users:
     print "Adding a new user--------------------------------------------------"
-    engine.execute("INSERT INTO Usercritic Values(%s, %s, %d)" % (username, gender, age))
+    engine.execute("INSERT INTO Usercritic Values(%s, %s, %d)" % (username_formatted, gender, age))
 
 
   print [mv[0] for mv in engine.execute("SELECT movie_id FROM Usercritic U, Reviews R WHERE U.username = R.username AND U.username = %s" % (username_formatted))]  
