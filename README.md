@@ -2,7 +2,7 @@
 
 The PostgreSQL account: slc2206
 
-Web application URL: 
+Web application URL: http://35.185.16.182:8111/
 
 Compare / Contrast to original proposal: 
 Our intial vision was that the user would be able to query the database with variety of fields 
@@ -24,7 +24,7 @@ User Critic Reviews Page: We added the ability for users to submit thier own use
 Most interesting web pages (in terms of database operations, what the pages are used for, how the page is related to the database operations):
 
 1. User Critic Reviews Page:
-As described above, this page allows users to submit thier own movie reviews. This is interesting becasue it allows the user to add new information to the database, via insertions of thier reviews. This is so cool because it means our database is no longer static but can evolve as more users interact with it. 
+As described above, this page allows users to submit thier own movie reviews. This is interesting becasue it allows the user to add new information to the database, via insertions of thier reviews. This is so cool because it means our database is no longer static but can evolve as more users interact with it. If a user has never before entered a review, we add both their user information into the User Critic table and record thier specific movie rating in the Reviews table. If they are a previous user and they are trying to re-rate a movie, we deny their review request - you shouldn't be wishy washy with your reviewing, this is for only preprofessional critics - and then refresh the User Reviews page. If they want to add a review for a new movie, and they are already in the User Critic table, we allow this and insert the new tuple into the Reviews table. 
 
 2. Quick Q's Page:
-This page allows for users to select what entity they have questions about, and which specific attribute of that entity is of interest. Depending on the attribute, there may be options to rank in descending or ascending order. Then it displays a table of that entity's instances (for example, all the Distributors), ordered by the attribute the user chose. This is interesting because the user has the most freedom in this section to define the search. The database operations happening on the backend are a variety of queries that change depending on what entity and entity attributes the user selects. 
+This page allows for users to dig deeper into the database while not haveing a complicated search process. They first select what entity they have questions about, and which specific attribute of that entity is of interest. Then it displays a table of that entity's instances (for example, all the Distributors), ordered by the attribute the user chose. This is interesting because the user has the most freedom in this section to define the search. The database operations happening on the backend are a variety of queries that change depending on what entity and entity attributes the user selects. 
