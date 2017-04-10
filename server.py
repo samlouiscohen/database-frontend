@@ -443,7 +443,7 @@ def push_to_database():
     return render_template("usercritic.html", userReviews = userReviews, movies = movies)
 
 
-  engine.execute("INSERT INTO Reviews Values(%d, %d, %s)" % (movieID, review, username))
+  engine.execute("INSERT INTO Reviews Values(%d, %d, %s)" % (movieID, review, username_formatted))
 
   userReviews = [u for u in engine.execute("SELECT * FROM Usercritic U, Reviews R, Movie M WHERE U.username = R.username AND R.movie_id = M.movie_id ORDER BY R.rating DESC")] 
   return render_template("usercritic.html", userReviews = userReviews, movies = movies)
